@@ -1,7 +1,7 @@
-import gtag from './gtag';
-import format from './format';
+import gtag from "./gtag";
+import format from "./format";
 
-class GA4 {
+export class GA4 {
   constructor() {
     this.reset();
   }
@@ -29,13 +29,13 @@ class GA4 {
   };
 
   _loadGA = (GA_MEASUREMENT_ID) => {
-    if (typeof window === 'undefined' || typeof document === 'undefined') {
+    if (typeof window === "undefined" || typeof document === "undefined") {
       return;
     }
 
     if (!this._hasLoadedGA) {
       // Global Site Tag (gtag.js) - Google Analytics
-      const script = document.createElement('script');
+      const script = document.createElement("script");
       script.async = true;
       script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
       document.body.appendChild(script);
@@ -57,23 +57,23 @@ class GA4 {
     const mapFields = {
       // Old https://developers.google.com/analytics/devguides/collection/analyticsjs/field-reference#cookieUpdate
       // New https://developers.google.com/analytics/devguides/collection/gtagjs/cookies-user-id#cookie_update
-      cookieUpdate: 'cookie_update',
-      cookieExpires: 'cookie_expires',
-      cookieDomain: 'cookie_domain',
-      cookiePrefix: 'cookie_prefix',
-      cookieFlags: 'cookie_flags', // must be in set method?
-      userId: 'user_id',
-      clientId: 'client_id',
-      anonymizeIp: 'anonymize_ip',
-      contentGroup1: 'content_group1',
-      contentGroup2: 'content_group2',
-      contentGroup3: 'content_group3',
-      contentGroup4: 'content_group4',
+      cookieUpdate: "cookie_update",
+      cookieExpires: "cookie_expires",
+      cookieDomain: "cookie_domain",
+      cookiePrefix: "cookie_prefix",
+      cookieFlags: "cookie_flags", // must be in set method?
+      userId: "user_id",
+      clientId: "client_id",
+      anonymizeIp: "anonymize_ip",
+      contentGroup1: "content_group1",
+      contentGroup2: "content_group2",
+      contentGroup3: "content_group3",
+      contentGroup4: "content_group4",
       // https://support.google.com/analytics/answer/9050852?hl=en
-      allowAdFeatures: 'allow_google_signals',
-      allowAdPersonalizationSignals: 'allow_ad_personalization_signals',
-      nonInteraction: 'non_interaction',
-      page: 'page_path',
+      allowAdFeatures: "allow_google_signals",
+      allowAdPersonalizationSignals: "allow_ad_personalization_signals",
+      nonInteraction: "non_interaction",
+      page: "page_path",
     };
 
     const gtagOptions = Object.entries(gaOptions).reduce(
@@ -103,7 +103,7 @@ class GA4 {
    */
   initialize = (GA_MEASUREMENT_ID, options = {}) => {
     if (!GA_MEASUREMENT_ID) {
-      throw new Error('Require GA_MEASUREMENT_ID');
+      throw new Error("Require GA_MEASUREMENT_ID");
     }
 
     this._current_GA_MEASUREMENT_ID = GA_MEASUREMENT_ID;
@@ -121,8 +121,8 @@ class GA4 {
       this._loadGA(this._current_GA_MEASUREMENT_ID, mergedGtagOptions);
     }
     if (!this.isInitialized) {
-      this._gtag('js', new Date());
-      this._gtag('config', this._current_GA_MEASUREMENT_ID, mergedGtagOptions);
+      this._gtag("js", new Date());
+      this._gtag("config", this._current_GA_MEASUREMENT_ID, mergedGtagOptions);
     }
     this.isInitialized = true;
 
@@ -133,7 +133,7 @@ class GA4 {
       while (queues.length) {
         const queue = queues.shift();
         this._gtag(...queue);
-        if (queue[0] === 'get') {
+        if (queue[0] === "get") {
           this._isQueuing = true;
         }
       }
@@ -142,22 +142,22 @@ class GA4 {
 
   set = (fieldsObject) => {
     if (!fieldsObject) {
-      console.warn('`fieldsObject` is required in .set()');
+      console.warn("`fieldsObject` is required in .set()");
 
       return;
     }
 
-    if (typeof fieldsObject !== 'object') {
-      console.warn('Expected `fieldsObject` arg to be an Object');
+    if (typeof fieldsObject !== "object") {
+      console.warn("Expected `fieldsObject` arg to be an Object");
 
       return;
     }
 
     if (Object.keys(fieldsObject).length === 0) {
-      console.warn('empty `fieldsObject` given to .set()');
+      console.warn("empty `fieldsObject` given to .set()");
     }
 
-    return this._gaCommand('set', fieldsObject);
+    return this._gaCommand("set", fieldsObject);
   };
 
   _gaCommandSendEvent = (
@@ -169,7 +169,7 @@ class GA4 {
   ) => {
     // need to change default value "(not set)" in category and label?
     // https://developers.google.com/analytics/devguides/collection/gtagjs/events#default-event-categories-and-labels
-    this._gtag('event', eventAction, {
+    this._gtag("event", eventAction, {
       event_category: eventCategory,
       event_label: eventLabel,
       value: eventValue,
@@ -179,7 +179,7 @@ class GA4 {
   };
 
   _gaCommandSendEventParameters = (...args) => {
-    if (typeof args[0] === 'string') {
+    if (typeof args[0] === "string") {
       this._gaCommandSendEvent(...args.slice(1));
     } else {
       const {
@@ -207,7 +207,7 @@ class GA4 {
     timingValue,
     timingLabel
   ) => {
-    this._gtag('event', 'timing_complete', {
+    this._gtag("event", "timing_complete", {
       name: timingVar,
       value: timingValue,
       event_category: timingCategory,
@@ -217,35 +217,35 @@ class GA4 {
 
   _gaCommandSendPageview = (pageTitle, pageLocation, pagePath) => {
     if (pageTitle || pageLocation || pagePath) {
-      this._gtag('event', 'page_view', {
+      this._gtag("event", "page_view", {
         page_title: pageTitle,
         page_location: pageLocation,
         page_path: pagePath,
       });
     } else {
-      this._gtag('event', 'page_view');
+      this._gtag("event", "page_view");
     }
   };
 
   // https://developers.google.com/analytics/devguides/collection/analyticsjs/command-queue-reference#send
   _gaCommandSend = (...args) => {
-    const hitType = typeof args[0] === 'string' ? args[0] : args[0].hitType;
+    const hitType = typeof args[0] === "string" ? args[0] : args[0].hitType;
 
     switch (hitType) {
-      case 'event':
+      case "event":
         this._gaCommandSendEventParameters(...args);
         break;
-      case 'pageview':
+      case "pageview":
         this._gaCommandSendPageview(...args.slice(1));
         break;
-      case 'timing':
+      case "timing":
         this._gaCommandSendTiming(...args.slice(1));
         break;
-      case 'screenview':
-      case 'transaction':
-      case 'item':
-      case 'social':
-      case 'exception':
+      case "screenview":
+      case "transaction":
+      case "item":
+      case "social":
+      case "exception":
         console.warn(`Unsupported send command: ${hitType}`);
         break;
       default:
@@ -254,18 +254,18 @@ class GA4 {
   };
 
   _gaCommandSet = (...args) => {
-    if (typeof args[0] === 'string') {
+    if (typeof args[0] === "string") {
       args[0] = { [args[0]]: args[1] };
     }
-    this._gtag('set', this._toGtagOptions(args[0]));
+    this._gtag("set", this._toGtagOptions(args[0]));
   };
 
   _gaCommand = (command, ...args) => {
     switch (command) {
-      case 'send':
+      case "send":
         this._gaCommandSend(...args);
         break;
-      case 'set':
+      case "set":
         this._gaCommandSet(...args);
         break;
       default:
@@ -274,26 +274,26 @@ class GA4 {
   };
 
   ga = (...args) => {
-    if (typeof args[0] === 'string') {
+    if (typeof args[0] === "string") {
       this._gaCommand(...args);
     } else {
       const [readyCallback] = args;
       this._gtag(
-        'get',
+        "get",
         this._current_GA_MEASUREMENT_ID,
-        'client_id',
+        "client_id",
         (clientId) => {
           this._isQueuing = false;
           const queues = this._queueGtag;
 
           readyCallback({
             get: (property) =>
-              property === 'clientId'
+              property === "clientId"
                 ? clientId
-                : property === 'trackingId'
+                : property === "trackingId"
                 ? this._current_GA_MEASUREMENT_ID
-                : property === 'apiVersion'
-                ? '1'
+                : property === "apiVersion"
+                ? "1"
                 : undefined,
           });
 
@@ -320,14 +320,14 @@ class GA4 {
     ...args
   } = {}) => {
     if (!category || !action) {
-      console.warn('args.category AND args.action are required in event()');
+      console.warn("args.category AND args.action are required in event()");
 
       return;
     }
 
     // Required Fields
     const fieldObject = {
-      hitType: 'event',
+      hitType: "event",
       eventCategory: format(category),
       eventAction: format(action),
     };
@@ -337,29 +337,29 @@ class GA4 {
       fieldObject.eventLabel = format(label);
     }
 
-    if (typeof value !== 'undefined') {
-      if (typeof value !== 'number') {
-        console.warn('Expected `args.value` arg to be a Number.');
+    if (typeof value !== "undefined") {
+      if (typeof value !== "number") {
+        console.warn("Expected `args.value` arg to be a Number.");
       } else {
         fieldObject.eventValue = value;
       }
     }
 
-    if (typeof nonInteraction !== 'undefined') {
-      if (typeof nonInteraction !== 'boolean') {
-        console.warn('`args.nonInteraction` must be a boolean.');
+    if (typeof nonInteraction !== "undefined") {
+      if (typeof nonInteraction !== "boolean") {
+        console.warn("`args.nonInteraction` must be a boolean.");
       } else {
         fieldObject.nonInteraction = nonInteraction;
       }
     }
 
-    if (typeof transport !== 'undefined') {
-      if (typeof transport !== 'string') {
-        console.warn('`args.transport` must be a string.');
+    if (typeof transport !== "undefined") {
+      if (typeof transport !== "string") {
+        console.warn("`args.transport` must be a string.");
       } else {
-        if (['beacon', 'xhr', 'image'].indexOf(transport) === -1) {
+        if (["beacon", "xhr", "image"].indexOf(transport) === -1) {
           console.warn(
-            '`args.transport` must be either one of these values: `beacon`, `xhr` or `image`'
+            "`args.transport` must be either one of these values: `beacon`, `xhr` or `image`"
           );
         }
 
@@ -368,22 +368,22 @@ class GA4 {
     }
 
     Object.keys(args)
-      .filter((key) => key.substr(0, 'dimension'.length) === 'dimension')
+      .filter((key) => key.substr(0, "dimension".length) === "dimension")
       .forEach((key) => {
         fieldObject[key] = args[key];
       });
 
     Object.keys(args)
-      .filter((key) => key.substr(0, 'metric'.length) === 'metric')
+      .filter((key) => key.substr(0, "metric".length) === "metric")
       .forEach((key) => {
         fieldObject[key] = args[key];
       });
 
-    this._gaCommand('send', fieldObject);
+    this._gaCommand("send", fieldObject);
   };
 
   send = (fieldObject) => {
-    return this._gaCommand('send', fieldObject);
+    return this._gaCommand("send", fieldObject);
   };
 
   _appendCustomMap(options) {

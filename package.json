@@ -3,8 +3,10 @@
   "version": "1.0.0",
   "description": "React Google Analytics 4",
   "main": "dist/index.js",
+  "types": "types/index.d.ts",
   "scripts": {
     "build": "NODE_ENV=production babel src -d dist",
+    "postbuild": "tsc src/index.js --declaration --allowJs --emitDeclarationOnly --outDir types",
     "test": "NODE_ENV=test jest"
   },
   "author": "Han Lin Yap (https://yap.nu)",
@@ -21,14 +23,16 @@
     "url": "git+https://github.com/PriceRunner/react-ga4.git"
   },
   "devDependencies": {
-    "@babel/cli": "^7.14.3",
-    "@babel/core": "^7.14.3",
-    "@babel/preset-env": "^7.14.2",
-    "babel-jest": "^27.0.1",
-    "core-js": "^3.13.0",
-    "jest": "^27.0.1"
+    "@babel/cli": "^7.14.5",
+    "@babel/core": "^7.14.6",
+    "@babel/preset-env": "^7.14.5",
+    "babel-jest": "^27.0.2",
+    "jest": "^27.0.4",
+    "typescript": "^4.3.3"
   },
   "jest": {
-    "testPathIgnorePatterns": ["dist"]
+    "testPathIgnorePatterns": [
+      "dist"
+    ]
   }
 }
