@@ -95,11 +95,11 @@ export class GA4 {
   /**
    *
    * @param {string} GA_MEASUREMENT_ID
-   * @param {Object} options
-   * @param {boolean} options.testMode
-   * @param {Object} options.gaOptions
-   * @param {boolean} options.gaOptions.cookieUpdate Default true
-   * @param {Object} options.gtagOptions New parameter
+   * @param {Object} [options]
+   * @param {boolean} [options.testMode=false]
+   * @param {Object} [options.gaOptions]
+   * @param {boolean} [options.gaOptions.cookieUpdate=true]
+   * @param {Object} [options.gtagOptions] New parameter
    */
   initialize = (GA_MEASUREMENT_ID, options = {}) => {
     if (!GA_MEASUREMENT_ID) {
@@ -402,6 +402,22 @@ export class GA4 {
 
     return options;
   }
+
+  /**
+   * @since v1.0.2
+   * @param {string} [path=location.href]
+   * @param {string[]} [_] unsupported
+   * @param {string} [title=location.pathname]
+   */
+  pageview = (path, _, title) => {
+    const pathTrim = path?.trim();
+    if (pathTrim === "") {
+      console.warn("path cannot be an empty string in .pageview()");
+      return;
+    }
+
+    this._gaCommand("send", "pageview", title, undefined, pathTrim);
+  };
 }
 
 export default new GA4();

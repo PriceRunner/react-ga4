@@ -285,4 +285,21 @@ describe("GA4", () => {
       expect(Object.keys(gtag.mock.calls[0][1])).toContain("dimension3");
     });
   });
+
+  describe("GA4.pageview()", () => {
+    it("pageview()", () => {
+      // Given
+      const path = "/location-pathname";
+      const title = "title value";
+
+      // When
+      GA4.pageview(path, undefined, title);
+
+      // Then
+      expect(gtag).toHaveBeenNthCalledWith(1, "event", "page_view", {
+        page_title: title,
+        page_path: path,
+      });
+    });
+  });
 });

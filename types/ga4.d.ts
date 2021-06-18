@@ -11,18 +11,18 @@ export class GA4 {
     /**
      *
      * @param {string} GA_MEASUREMENT_ID
-     * @param {Object} options
-     * @param {boolean} options.testMode
-     * @param {Object} options.gaOptions
-     * @param {boolean} options.gaOptions.cookieUpdate Default true
-     * @param {Object} options.gtagOptions New parameter
+     * @param {Object} [options]
+     * @param {boolean} [options.testMode=false]
+     * @param {Object} [options.gaOptions]
+     * @param {boolean} [options.gaOptions.cookieUpdate=true]
+     * @param {Object} [options.gtagOptions] New parameter
      */
     initialize: (GA_MEASUREMENT_ID: string, options?: {
-        testMode: boolean;
-        gaOptions: {
-            cookieUpdate: boolean;
+        testMode?: boolean;
+        gaOptions?: {
+            cookieUpdate?: boolean;
         };
-        gtagOptions: any;
+        gtagOptions?: any;
     }) => void;
     _current_GA_MEASUREMENT_ID: string;
     set: (fieldsObject: any) => void;
@@ -44,6 +44,13 @@ export class GA4 {
     }) => void;
     send: (fieldObject: any) => void;
     _appendCustomMap(options: any): any;
+    /**
+     * @since v1.0.2
+     * @param {string} [path=location.href]
+     * @param {string[]} [_] unsupported
+     * @param {string} [title=location.pathname]
+     */
+    pageview: (path?: string, _?: string[], title?: string) => void;
 }
 declare var _default: GA4;
 export default _default;
