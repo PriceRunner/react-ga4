@@ -1,6 +1,27 @@
 import gtag from "./gtag";
 import format from "./format";
 
+/**
+ * @typedef GaOptions
+ * @type {Object}
+ * @property {boolean} [cookieUpdate=true]
+ * @property {number} [cookieExpires=63072000] Default two years
+ * @property {string} [cookieDomain="auto"]
+ * @property {string} [cookieFlags]
+ * @property {string} [userId]
+ * @property {string} [clientId]
+ * @property {boolean} [anonymizeIp]
+ * @property {string} [contentGroup1]
+ * @property {string} [contentGroup2]
+ * @property {string} [contentGroup3]
+ * @property {string} [contentGroup4]
+ * @property {string} [contentGroup5]
+ * @property {boolean} [allowAdFeatures=true]
+ * @property {boolean} [allowAdPersonalizationSignals]
+ * @property {boolean} [nonInteraction]
+ * @property {string} [page]
+ */
+
 export class GA4 {
   constructor() {
     this.reset();
@@ -60,15 +81,16 @@ export class GA4 {
       cookieUpdate: "cookie_update",
       cookieExpires: "cookie_expires",
       cookieDomain: "cookie_domain",
-      cookiePrefix: "cookie_prefix",
       cookieFlags: "cookie_flags", // must be in set method?
       userId: "user_id",
       clientId: "client_id",
       anonymizeIp: "anonymize_ip",
+      // https://support.google.com/analytics/answer/2853546?hl=en#zippy=%2Cin-this-article
       contentGroup1: "content_group1",
       contentGroup2: "content_group2",
       contentGroup3: "content_group3",
       contentGroup4: "content_group4",
+      contentGroup5: "content_group5",
       // https://support.google.com/analytics/answer/9050852?hl=en
       allowAdFeatures: "allow_google_signals",
       allowAdPersonalizationSignals: "allow_ad_personalization_signals",
@@ -97,8 +119,7 @@ export class GA4 {
    * @param {string} GA_MEASUREMENT_ID
    * @param {Object} [options]
    * @param {boolean} [options.testMode=false]
-   * @param {Object} [options.gaOptions]
-   * @param {boolean} [options.gaOptions.cookieUpdate=true]
+   * @param {GaOptions|any} [options.gaOptions]
    * @param {Object} [options.gtagOptions] New parameter
    */
   initialize = (GA_MEASUREMENT_ID, options = {}) => {
@@ -405,9 +426,9 @@ export class GA4 {
 
   /**
    * @since v1.0.2
-   * @param {string} [path=location.href]
+   * @param {string} [path="location.href"]
    * @param {string[]} [_] unsupported
-   * @param {string} [title=location.pathname]
+   * @param {string} [title="location.pathname"]
    */
   pageview = (path, _, title) => {
     const pathTrim = path?.trim();
