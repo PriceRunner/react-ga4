@@ -51,13 +51,22 @@ export class GA4 {
     _gaCommandSet: (...args: any[]) => void;
     _gaCommand: (command: any, ...args: any[]) => void;
     ga: (...args: any[]) => any;
-    event: ({ category, action, label, value, nonInteraction, transport, ...args }?: {
-        category: any;
-        action: any;
-        label: any;
-        value: any;
-        nonInteraction: any;
-        transport: any;
+    /**
+     * @param {Object} options
+     * @param {string} options.action
+     * @param {string} options.category
+     * @param {string} [options.label]
+     * @param {number} [options.value]
+     * @param {boolean} [options.nonInteraction]
+     * @param {('beacon'|'xhr'|'image')} [options.transport]
+     */
+    event: ({ action, category, label, value, nonInteraction, transport, ...args }?: {
+        action: string;
+        category: string;
+        label?: string;
+        value?: number;
+        nonInteraction?: boolean;
+        transport?: ('beacon' | 'xhr' | 'image');
     }) => void;
     send: (fieldObject: any) => void;
     _appendCustomMap(options: any): any;
@@ -66,6 +75,7 @@ export class GA4 {
      * @param {string} [path="location.href"]
      * @param {string[]} [_] unsupported
      * @param {string} [title="location.pathname"]
+     * @deprecated Use `.send("pageview")` instead
      */
     pageview: (path?: string, _?: string[], title?: string) => void;
 }

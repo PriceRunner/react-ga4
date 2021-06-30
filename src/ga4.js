@@ -1,6 +1,11 @@
 import gtag from "./gtag";
 import format from "./format";
 
+/*
+Links
+https://developers.google.com/gtagjs/reference/api
+*/
+
 /**
  * @typedef GaOptions
  * @type {Object}
@@ -331,9 +336,18 @@ export class GA4 {
     return this.ga;
   };
 
+  /**
+   * @param {Object} options
+   * @param {string} options.action
+   * @param {string} options.category
+   * @param {string} [options.label]
+   * @param {number} [options.value]
+   * @param {boolean} [options.nonInteraction]
+   * @param {('beacon'|'xhr'|'image')} [options.transport]
+   */
   event = ({
-    category,
     action,
+    category,
     label,
     value,
     nonInteraction,
@@ -429,6 +443,7 @@ export class GA4 {
    * @param {string} [path="location.href"]
    * @param {string[]} [_] unsupported
    * @param {string} [title="location.pathname"]
+   * @deprecated Use `.send("pageview")` instead
    */
   pageview = (path, _, title) => {
     const pathTrim = path?.trim();
