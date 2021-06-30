@@ -54,10 +54,10 @@ export class GA4 {
     event: ({ category, action, label, value, nonInteraction, transport, ...args }?: {
         category: any;
         action: any;
-        label: any;
-        value: any;
-        nonInteraction: any;
-        transport: any;
+        label?: any;
+        value?: any;
+        nonInteraction?: any;
+        transport?: any;
     }) => void;
     send: (fieldObject: any) => void;
     _appendCustomMap(options: any): any;
