@@ -241,15 +241,34 @@ export class GA4 {
     });
   };
 
-  _gaCommandSendPageview = (pageTitle, pageLocation, pagePath) => {
-    if (pageTitle || pageLocation || pagePath) {
+  _gaCommandSendPageview = (page, fieldsObject) => {
+    if (fieldsObject && Object.keys(fieldsObject).length) {
+      const { title, location, ...rest } = this._toGtagOptions(fieldsObject);
+
       this._gtag("event", "page_view", {
-        page_title: pageTitle,
-        page_location: pageLocation,
-        page_path: pagePath,
+        ...(page && { page_path: page }),
+        ...(title && { page_title: title }),
+        ...(location && { page_location: location }),
+        ...rest,
       });
+    } else if (page) {
+      this._gtag("event", "page_view", { page_path: page });
     } else {
       this._gtag("event", "page_view");
+    }
+  };
+
+  _gaCommandSendPageviewParameters = (...args) => {
+    if (typeof args[0] === "string") {
+      this._gaCommandSendPageview(...args.slice(1));
+    } else {
+      const {
+        page,
+        // eslint-disable-next-line no-unused-vars
+        hitType,
+        ...rest
+      } = args[0];
+      this._gaCommandSendPageview(page, rest);
     }
   };
 
@@ -262,7 +281,7 @@ export class GA4 {
         this._gaCommandSendEventParameters(...args);
         break;
       case "pageview":
-        this._gaCommandSendPageview(...args.slice(1));
+        this._gaCommandSendPageviewParameters(...args);
         break;
       case "timing":
         this._gaCommandSendTiming(...args.slice(1));
@@ -452,7 +471,7 @@ export class GA4 {
       return;
     }
 
-    this._gaCommand("send", "pageview", title, undefined, pathTrim);
+    this._gaCommand("send", "pageview", pathTrim, { title });
   };
 }
 

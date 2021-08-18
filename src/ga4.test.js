@@ -302,4 +302,47 @@ describe("GA4", () => {
       });
     });
   });
+
+  describe("Reference", () => {
+    it("pageview", () => {
+      // Old https://developers.google.com/analytics/devguides/collection/analyticsjs/pages
+      // New https://developers.google.com/gtagjs/reference/event#page_view
+
+      // Given
+      const path = "/location-pathname";
+      const title = "title value";
+
+      // When / Then
+
+      // Without parameters
+      GA4.send("pageview");
+      expect(gtag).toHaveBeenNthCalledWith(1, "event", "page_view");
+      GA4.send({ hitType: "pageview" });
+      expect(gtag).toHaveBeenNthCalledWith(2, "event", "page_view");
+      GA4.ga("send", "pageview");
+      expect(gtag).toHaveBeenNthCalledWith(3, "event", "page_view");
+
+      // With path parameter
+      GA4.send({ hitType: "pageview", page: path });
+      expect(gtag).toHaveBeenNthCalledWith(4, "event", "page_view", {
+        page_path: path,
+      });
+      GA4.ga("send", "pageview", path);
+      expect(gtag).toHaveBeenNthCalledWith(5, "event", "page_view", {
+        page_path: path,
+      });
+
+      // With path and title parameter
+      GA4.send({ hitType: "pageview", page: path, title });
+      expect(gtag).toHaveBeenNthCalledWith(6, "event", "page_view", {
+        page_path: path,
+        page_title: title,
+      });
+      GA4.ga("send", "pageview", path, { title });
+      expect(gtag).toHaveBeenNthCalledWith(7, "event", "page_view", {
+        page_path: path,
+        page_title: title,
+      });
+    });
+  });
 });

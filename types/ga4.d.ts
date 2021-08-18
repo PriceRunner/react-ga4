@@ -46,7 +46,8 @@ export class GA4 {
     _gaCommandSendEvent: (eventCategory: any, eventAction: any, eventLabel: any, eventValue: any, fieldsObject: any) => void;
     _gaCommandSendEventParameters: (...args: any[]) => void;
     _gaCommandSendTiming: (timingCategory: any, timingVar: any, timingValue: any, timingLabel: any) => void;
-    _gaCommandSendPageview: (pageTitle: any, pageLocation: any, pagePath: any) => void;
+    _gaCommandSendPageview: (page: any, fieldsObject: any) => void;
+    _gaCommandSendPageviewParameters: (...args: any[]) => void;
     _gaCommandSend: (...args: any[]) => void;
     _gaCommandSet: (...args: any[]) => void;
     _gaCommand: (command: any, ...args: any[]) => void;

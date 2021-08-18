@@ -23,6 +23,13 @@ ReactGA.initialize("your GA measurement id");
 ReactGA.send("pageview");
 ```
 
+## Example
+
+```js
+// Send pageview with a custom path
+ReactGA.send({ hitType: "pageview", page: "/my-path" });
+```
+
 ## Maintainer
 
 [Han Lin Yap](https://github.com/codler)
