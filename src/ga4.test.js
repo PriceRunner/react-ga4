@@ -303,42 +303,77 @@ describe("GA4", () => {
     });
   });
 
+  describe("GA4.outboundLink()", () => {
+    function outboundLinkTest(givenTimeout) {
+      // Given
+      const label = "label value";
+      gtag.mockImplementationOnce((command, event_name, event_params) => {
+        setTimeout(() => event_params.event_callback(), givenTimeout);
+      });
+      const callback = jest.fn(() => {});
+
+      // When
+      GA4.outboundLink({ label }, callback);
+
+      // Then
+      expect(gtag).toHaveBeenNthCalledWith(1, "event", "Click", {
+        event_category: "Outbound",
+        event_label: "Label Value",
+        event_callback: expect.any(Function),
+      });
+      expect(callback).toHaveBeenCalledTimes(0);
+
+      jest.runAllTimers();
+
+      expect(callback).toHaveBeenCalledTimes(1);
+    }
+
+    it("outboundLink() before 250ms timeout", () => {
+      outboundLinkTest(100);
+    });
+
+    it("outboundLink() after 250ms timeout", () => {
+      outboundLinkTest(300);
+    });
+  });
+
   describe("Reference", () => {
     it("pageview", () => {
       // Old https://developers.google.com/analytics/devguides/collection/analyticsjs/pages
       // New https://developers.google.com/gtagjs/reference/event#page_view
 
       // Given
+      const hitType = "pageview";
       const path = "/location-pathname";
       const title = "title value";
 
       // When / Then
 
       // Without parameters
-      GA4.send("pageview");
+      GA4.send(hitType);
       expect(gtag).toHaveBeenNthCalledWith(1, "event", "page_view");
-      GA4.send({ hitType: "pageview" });
+      GA4.send({ hitType });
       expect(gtag).toHaveBeenNthCalledWith(2, "event", "page_view");
-      GA4.ga("send", "pageview");
+      GA4.ga("send", hitType);
       expect(gtag).toHaveBeenNthCalledWith(3, "event", "page_view");
 
       // With path parameter
-      GA4.send({ hitType: "pageview", page: path });
+      GA4.send({ hitType, page: path });
       expect(gtag).toHaveBeenNthCalledWith(4, "event", "page_view", {
         page_path: path,
       });
-      GA4.ga("send", "pageview", path);
+      GA4.ga("send", hitType, path);
       expect(gtag).toHaveBeenNthCalledWith(5, "event", "page_view", {
         page_path: path,
       });
 
       // With path and title parameter
-      GA4.send({ hitType: "pageview", page: path, title });
+      GA4.send({ hitType, page: path, title });
       expect(gtag).toHaveBeenNthCalledWith(6, "event", "page_view", {
         page_path: path,
         page_title: title,
       });
-      GA4.ga("send", "pageview", path, { title });
+      GA4.ga("send", hitType, path, { title });
       expect(gtag).toHaveBeenNthCalledWith(7, "event", "page_view", {
         page_path: path,
         page_title: title,

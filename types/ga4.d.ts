@@ -79,6 +79,16 @@ export class GA4 {
      * @deprecated Use `.send("pageview")` instead
      */
     pageview: (path?: string, _?: string[], title?: string) => void;
+    /**
+     * @since v1.0.6
+     * @param {Object} options
+     * @param {string} options.label
+     * @param {function} hitCallback
+     * @deprecated
+     */
+    outboundLink({ label }: {
+        label: string;
+    }, hitCallback: Function): void;
 }
 declare var _default: GA4;
 export default _default;

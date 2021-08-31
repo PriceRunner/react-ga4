@@ -101,6 +101,7 @@ export class GA4 {
       allowAdPersonalizationSignals: "allow_ad_personalization_signals",
       nonInteraction: "non_interaction",
       page: "page_path",
+      hitCallback: "event_callback",
     };
 
     const gtagOptions = Object.entries(gaOptions).reduce(
@@ -183,7 +184,7 @@ export class GA4 {
       console.warn("empty `fieldsObject` given to .set()");
     }
 
-    return this._gaCommand("set", fieldsObject);
+    this._gaCommand("set", fieldsObject);
   };
 
   _gaCommandSendEvent = (
@@ -437,7 +438,7 @@ export class GA4 {
   };
 
   send = (fieldObject) => {
-    return this._gaCommand("send", fieldObject);
+    this._gaCommand("send", fieldObject);
   };
 
   _appendCustomMap(options) {
@@ -473,6 +474,60 @@ export class GA4 {
 
     this._gaCommand("send", "pageview", pathTrim, { title });
   };
+
+  /**
+   * @since v1.0.6
+   * @param {Object} options
+   * @param {string} options.label
+   * @param {function} hitCallback
+   * @deprecated
+   */
+  outboundLink({ label }, hitCallback) {
+    if (typeof hitCallback !== "function") {
+      console.warn("hitCallback function is required");
+      return;
+    }
+
+    if (!label) {
+      console.warn("args.label is required in outboundLink()");
+      return;
+    }
+
+    // Required Fields
+    const fieldObject = {
+      hitType: "event",
+      eventCategory: "Outbound",
+      eventAction: "Click",
+      eventLabel: format(label),
+    };
+
+    let safetyCallbackCalled = false;
+    const safetyCallback = () => {
+      // This prevents a delayed response from GA
+      // causing hitCallback from being fired twice
+      safetyCallbackCalled = true;
+
+      hitCallback();
+    };
+
+    // Using a timeout to ensure the execution of critical application code
+    // in the case when the GA server might be down
+    // or an ad blocker prevents sending the data
+
+    // register safety net timeout:
+    const t = setTimeout(safetyCallback, 250);
+
+    const clearableCallbackForGA = () => {
+      clearTimeout(t);
+      if (!safetyCallbackCalled) {
+        hitCallback();
+      }
+    };
+
+    fieldObject.hitCallback = clearableCallbackForGA;
+
+    this._gaCommand("send", fieldObject);
+  }
 }
 
 export default new GA4();

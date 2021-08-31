@@ -25,6 +25,8 @@ ReactGA.send("pageview");
 
 ## Example
 
+More example can be found in [test suite](src/ga4.test.js)
+
 ```js
 // Send pageview with a custom path
 ReactGA.send({ hitType: "pageview", page: "/my-path" });
@@ -36,7 +38,7 @@ ReactGA.event({
   label: "your label", // optional
   value: 99, // optional, must be a number
   nonInteraction: true, // optional, true/false
-  transport: "xhr" // optional, beacon/xhr/image
+  transport: "xhr", // optional, beacon/xhr/image
 });
 ```
 
