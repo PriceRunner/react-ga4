@@ -380,4 +380,48 @@ describe("GA4", () => {
       });
     });
   });
+
+  describe("Web vitals", () => {
+    it("Web vitals", () => {
+      // https://github.com/GoogleChrome/web-vitals/blob/main/README.md
+      function sendToGoogleAnalytics({ name, delta, value, id }) {
+        GA4.send({
+          hitType: "event",
+          eventCategory: "Web Vitals",
+          eventAction: name,
+          eventLabel: id,
+          nonInteraction: true,
+          // Built-in params:
+          value: Math.round(name === "CLS" ? delta * 1000 : delta), // Use `delta` so the value can be summed.
+          // Custom params:
+          metric_id: id, // Needed to aggregate events.
+          metric_value: value, // Optional.
+          metric_delta: delta, // Optional.
+
+          // OPTIONAL: any additional params or debug info here.
+          // See: https://web.dev/debug-web-vitals-in-the-field/
+          // metric_rating: 'good' | 'ni' | 'poor',
+          // debug_info: '...',
+          // ...
+        });
+      }
+
+      sendToGoogleAnalytics({
+        name: "CLS",
+        delta: 12.34,
+        value: 1,
+        id: "v2-1632380328370-6426221164013",
+      });
+
+      expect(gtag).toHaveBeenNthCalledWith(1, "event", "CLS", {
+        event_category: "Web Vitals",
+        event_label: "v2-1632380328370-6426221164013",
+        metric_delta: 12.34,
+        metric_id: "v2-1632380328370-6426221164013",
+        metric_value: 1,
+        non_interaction: true,
+        value: 12340,
+      });
+    });
+  });
 });

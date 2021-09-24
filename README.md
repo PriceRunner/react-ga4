@@ -42,6 +42,53 @@ ReactGA.event({
 });
 ```
 
+## API
+
+#### ReactGA.initialize(GA_MEASUREMENT_ID, options)
+
+| Parameter           | Notes                                                                                                                   |
+| ------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| GA_MEASUREMENT_ID   | `string` Required                                                                                                       |
+| options.testMode    | `boolean` Default false                                                                                                 |
+| options.gaOptions   | `object` Optional [Reference](https://developers.google.com/analytics/devguides/collection/analyticsjs/field-reference) |
+| options.gtagOptions | `object` Optional                                                                                                       |
+
+#### ReactGA.set(fieldsObject)
+
+| Parameter    | Notes             |
+| ------------ | ----------------- |
+| fieldsObject | `object` Required |
+
+#### ReactGA.event(options)
+
+| Parameter                    | Notes                               |
+| ---------------------------- | ----------------------------------- |
+| options                      | `object` Required                   |
+| options.action               | `string` Required                   |
+| options.category             | `string` Required                   |
+| options.label                | `string` Optional                   |
+| options.value                | `number` Optional                   |
+| options.nonInteraction       | `boolean` Optional                  |
+| options.transport            | `'beacon'\|'xhr'\|'image'` Optional |
+| options.dimension`{1...200}` | `any` Optional                      |
+| options.metric`{1...200}`    | `any` Optional                      |
+
+#### ReactGA.send(fieldsObject)
+
+| Parameter    | Notes             |
+| ------------ | ----------------- |
+| fieldsObject | `object` Required |
+
+#### ReactGA&#46;ga(...args)
+
+#### ~~ReactGA.pageview(path, \_, title)~~ Deprecated Use `.send("pageview")` instead
+
+#### ~~ReactGA.outboundLink({ label }, hitCallback)~~ Deprecated
+
+## Debugging
+
+Use [Google Analytics Debugger Chrome Extension](https://chrome.google.com/webstore/detail/google-analytics-debugger/jnkmfdileelhofjcijamephohjechhna?hl=en) to see logs
+
 ## Maintainer
 
 [Han Lin Yap](https://github.com/codler)

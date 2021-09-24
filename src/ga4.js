@@ -36,7 +36,7 @@ export class GA4 {
     this.isInitialized = false;
 
     this._testMode = false;
-    this._current_GA_MEASUREMENT_ID;
+    this._CURRENT_GA_MEASUREMENT_ID;
     this._hasLoadedGA = false;
     this._isQueuing = false;
     this._queueGtag = [];
@@ -133,7 +133,7 @@ export class GA4 {
       throw new Error("Require GA_MEASUREMENT_ID");
     }
 
-    this._current_GA_MEASUREMENT_ID = GA_MEASUREMENT_ID;
+    this._CURRENT_GA_MEASUREMENT_ID = GA_MEASUREMENT_ID;
     const { testMode = false, gaOptions, gtagOptions } = options;
     this._testMode = testMode;
 
@@ -145,11 +145,11 @@ export class GA4 {
     });
 
     if (!testMode) {
-      this._loadGA(this._current_GA_MEASUREMENT_ID, mergedGtagOptions);
+      this._loadGA(this._CURRENT_GA_MEASUREMENT_ID, mergedGtagOptions);
     }
     if (!this.isInitialized) {
       this._gtag("js", new Date());
-      this._gtag("config", this._current_GA_MEASUREMENT_ID, mergedGtagOptions);
+      this._gtag("config", this._CURRENT_GA_MEASUREMENT_ID, mergedGtagOptions);
     }
     this.isInitialized = true;
 
@@ -326,7 +326,7 @@ export class GA4 {
       const [readyCallback] = args;
       this._gtag(
         "get",
-        this._current_GA_MEASUREMENT_ID,
+        this._CURRENT_GA_MEASUREMENT_ID,
         "client_id",
         (clientId) => {
           this._isQueuing = false;
@@ -337,7 +337,7 @@ export class GA4 {
               property === "clientId"
                 ? clientId
                 : property === "trackingId"
-                ? this._current_GA_MEASUREMENT_ID
+                ? this._CURRENT_GA_MEASUREMENT_ID
                 : property === "apiVersion"
                 ? "1"
                 : undefined,
