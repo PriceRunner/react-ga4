@@ -18,6 +18,16 @@
  * @property {boolean} [nonInteraction]
  * @property {string} [page]
  */
+/**
+ * @typedef UaEventOptions
+ * @type {Object}
+ * @property {string} action
+ * @property {string} category
+ * @property {string} [label]
+ * @property {number} [value]
+ * @property {boolean} [nonInteraction]
+ * @property {('beacon'|'xhr'|'image')} [transport]
+ */
 export class GA4 {
     reset: () => void;
     isInitialized: boolean;
@@ -53,22 +63,10 @@ export class GA4 {
     _gaCommand: (command: any, ...args: any[]) => void;
     ga: (...args: any[]) => any;
     /**
-     * @param {Object} options
-     * @param {string} options.action
-     * @param {string} options.category
-     * @param {string} [options.label]
-     * @param {number} [options.value]
-     * @param {boolean} [options.nonInteraction]
-     * @param {('beacon'|'xhr'|'image')} [options.transport]
+     * @param {UaEventOptions|string} optionsOrName
+     * @param {Object} [params]
      */
-    event: ({ action, category, label, value, nonInteraction, transport, ...args }?: {
-        action: string;
-        category: string;
-        label?: string;
-        value?: number;
-        nonInteraction?: boolean;
-        transport?: ('beacon' | 'xhr' | 'image');
-    }) => void;
+    event: (optionsOrName: UaEventOptions | string, params?: any) => void;
     send: (fieldObject: any) => void;
     _appendCustomMap(options: any): any;
     /**
@@ -112,4 +110,12 @@ export type GaOptions = {
     allowAdPersonalizationSignals?: boolean;
     nonInteraction?: boolean;
     page?: string;
+};
+export type UaEventOptions = {
+    action: string;
+    category: string;
+    label?: string;
+    value?: number;
+    nonInteraction?: boolean;
+    transport?: ('beacon' | 'xhr' | 'image');
 };

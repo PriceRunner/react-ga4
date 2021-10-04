@@ -42,7 +42,7 @@ ReactGA.event({
 });
 ```
 
-## API
+## Reference
 
 #### ReactGA.initialize(GA_MEASUREMENT_ID, options)
 
@@ -58,6 +58,15 @@ ReactGA.event({
 | Parameter    | Notes             |
 | ------------ | ----------------- |
 | fieldsObject | `object` Required |
+
+#### ReactGA.event(name, params)
+
+This method signature are NOT for `UA-XXX`
+
+| Parameter | Notes                                                                                                                         |
+| --------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| name      | `string` Required A [recommended event](https://developers.google.com/tag-platform/gtagjs/reference/events) or a custom event |
+| params    | `object` Optional                                                                                                             |
 
 #### ReactGA.event(options)
 

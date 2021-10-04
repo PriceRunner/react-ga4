@@ -4,6 +4,7 @@ import format from "./format";
 /*
 Links
 https://developers.google.com/gtagjs/reference/api
+https://developers.google.com/tag-platform/gtagjs/reference
 */
 
 /**
@@ -25,6 +26,17 @@ https://developers.google.com/gtagjs/reference/api
  * @property {boolean} [allowAdPersonalizationSignals]
  * @property {boolean} [nonInteraction]
  * @property {string} [page]
+ */
+
+/**
+ * @typedef UaEventOptions
+ * @type {Object}
+ * @property {string} action
+ * @property {string} category
+ * @property {string} [label]
+ * @property {number} [value]
+ * @property {boolean} [nonInteraction]
+ * @property {('beacon'|'xhr'|'image')} [transport]
  */
 
 export class GA4 {
@@ -194,8 +206,6 @@ export class GA4 {
     eventValue,
     fieldsObject
   ) => {
-    // need to change default value "(not set)" in category and label?
-    // https://developers.google.com/analytics/devguides/collection/gtagjs/events#default-event-categories-and-labels
     this._gtag("event", eventAction, {
       event_category: eventCategory,
       event_label: eventLabel,
@@ -357,84 +367,84 @@ export class GA4 {
   };
 
   /**
-   * @param {Object} options
-   * @param {string} options.action
-   * @param {string} options.category
-   * @param {string} [options.label]
-   * @param {number} [options.value]
-   * @param {boolean} [options.nonInteraction]
-   * @param {('beacon'|'xhr'|'image')} [options.transport]
+   * @param {UaEventOptions|string} optionsOrName
+   * @param {Object} [params]
    */
-  event = ({
-    action,
-    category,
-    label,
-    value,
-    nonInteraction,
-    transport,
-    ...args
-  } = {}) => {
-    if (!category || !action) {
-      console.warn("args.category AND args.action are required in event()");
+  event = (optionsOrName, params) => {
+    if (typeof optionsOrName === "string") {
+      this._gtag("event", optionsOrName, this._toGtagOptions(params));
+    } else {
+      const {
+        action,
+        category,
+        label,
+        value,
+        nonInteraction,
+        transport,
+        ...rest
+      } = optionsOrName;
+      if (!category || !action) {
+        console.warn("args.category AND args.action are required in event()");
 
-      return;
-    }
-
-    // Required Fields
-    const fieldObject = {
-      hitType: "event",
-      eventCategory: format(category),
-      eventAction: format(action),
-    };
-
-    // Optional Fields
-    if (label) {
-      fieldObject.eventLabel = format(label);
-    }
-
-    if (typeof value !== "undefined") {
-      if (typeof value !== "number") {
-        console.warn("Expected `args.value` arg to be a Number.");
-      } else {
-        fieldObject.eventValue = value;
+        return;
       }
-    }
 
-    if (typeof nonInteraction !== "undefined") {
-      if (typeof nonInteraction !== "boolean") {
-        console.warn("`args.nonInteraction` must be a boolean.");
-      } else {
-        fieldObject.nonInteraction = nonInteraction;
+      // Required Fields
+      const fieldObject = {
+        hitType: "event",
+        eventCategory: format(category),
+        eventAction: format(action),
+      };
+
+      // Optional Fields
+      if (label) {
+        fieldObject.eventLabel = format(label);
       }
-    }
 
-    if (typeof transport !== "undefined") {
-      if (typeof transport !== "string") {
-        console.warn("`args.transport` must be a string.");
-      } else {
-        if (["beacon", "xhr", "image"].indexOf(transport) === -1) {
-          console.warn(
-            "`args.transport` must be either one of these values: `beacon`, `xhr` or `image`"
-          );
+      if (typeof value !== "undefined") {
+        if (typeof value !== "number") {
+          console.warn("Expected `args.value` arg to be a Number.");
+        } else {
+          fieldObject.eventValue = value;
         }
-
-        fieldObject.transport = transport;
       }
+
+      if (typeof nonInteraction !== "undefined") {
+        if (typeof nonInteraction !== "boolean") {
+          console.warn("`args.nonInteraction` must be a boolean.");
+        } else {
+          fieldObject.nonInteraction = nonInteraction;
+        }
+      }
+
+      if (typeof transport !== "undefined") {
+        if (typeof transport !== "string") {
+          console.warn("`args.transport` must be a string.");
+        } else {
+          if (["beacon", "xhr", "image"].indexOf(transport) === -1) {
+            console.warn(
+              "`args.transport` must be either one of these values: `beacon`, `xhr` or `image`"
+            );
+          }
+
+          fieldObject.transport = transport;
+        }
+      }
+
+      Object.keys(rest)
+        .filter((key) => key.substr(0, "dimension".length) === "dimension")
+        .forEach((key) => {
+          fieldObject[key] = rest[key];
+        });
+
+      Object.keys(rest)
+        .filter((key) => key.substr(0, "metric".length) === "metric")
+        .forEach((key) => {
+          fieldObject[key] = rest[key];
+        });
+
+      this._gaCommand("send", fieldObject);
     }
-
-    Object.keys(args)
-      .filter((key) => key.substr(0, "dimension".length) === "dimension")
-      .forEach((key) => {
-        fieldObject[key] = args[key];
-      });
-
-    Object.keys(args)
-      .filter((key) => key.substr(0, "metric".length) === "metric")
-      .forEach((key) => {
-        fieldObject[key] = args[key];
-      });
-
-    this._gaCommand("send", fieldObject);
   };
 
   send = (fieldObject) => {

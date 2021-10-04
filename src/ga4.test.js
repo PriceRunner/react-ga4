@@ -206,6 +206,21 @@ describe("GA4", () => {
   });
 
   describe("GA4.event()", () => {
+    it("event() custom events", () => {
+      // Given
+      const eventName = "screen_view";
+      const eventParams = {
+        app_name: "myAppName",
+        screen_name: "Home",
+      };
+
+      // When
+      GA4.event(eventName, eventParams);
+
+      // Then
+      expect(gtag).toHaveBeenNthCalledWith(1, "event", eventName, eventParams);
+    });
+
     it("event() simple", () => {
       // Given
       const object = {
