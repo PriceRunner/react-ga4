@@ -39,6 +39,14 @@ https://developers.google.com/tag-platform/gtagjs/reference
  * @property {('beacon'|'xhr'|'image')} [transport]
  */
 
+/**
+ * @typedef InitOptions
+ * @type {Object}
+ * @property {string} trackingId
+ * @property {GaOptions|any} [gaOptions]
+ * @property {Object} [gtagOptions] New parameter
+ */
+
 export class GA4 {
   constructor() {
     this.reset();
@@ -48,7 +56,7 @@ export class GA4 {
     this.isInitialized = false;
 
     this._testMode = false;
-    this._CURRENT_GA_MEASUREMENT_ID;
+    this._currentMeasurementId;
     this._hasLoadedGA = false;
     this._isQueuing = false;
     this._queueGtag = [];
@@ -134,7 +142,7 @@ export class GA4 {
 
   /**
    *
-   * @param {string} GA_MEASUREMENT_ID
+   * @param {InitOptions|string} GA_MEASUREMENT_ID
    * @param {Object} [options]
    * @param {boolean} [options.testMode=false]
    * @param {GaOptions|any} [options.gaOptions]
@@ -145,23 +153,31 @@ export class GA4 {
       throw new Error("Require GA_MEASUREMENT_ID");
     }
 
-    this._CURRENT_GA_MEASUREMENT_ID = GA_MEASUREMENT_ID;
+    const initConfigs =
+      typeof GA_MEASUREMENT_ID === "string"
+        ? [{ trackingId: GA_MEASUREMENT_ID }]
+        : GA_MEASUREMENT_ID;
+
+    this._currentMeasurementId = initConfigs[0].trackingId;
     const { testMode = false, gaOptions, gtagOptions } = options;
     this._testMode = testMode;
 
-    const mergedGtagOptions = this._appendCustomMap({
-      // https://developers.google.com/analytics/devguides/collection/gtagjs/pages#disable_pageview_measurement
-      send_page_view: false, // default true, but React GA had false before.
-      ...this._toGtagOptions(gaOptions),
-      ...gtagOptions,
-    });
-
     if (!testMode) {
-      this._loadGA(this._CURRENT_GA_MEASUREMENT_ID, mergedGtagOptions);
+      this._loadGA(this._currentMeasurementId);
     }
     if (!this.isInitialized) {
       this._gtag("js", new Date());
-      this._gtag("config", this._CURRENT_GA_MEASUREMENT_ID, mergedGtagOptions);
+
+      initConfigs.forEach((config) => {
+        const mergedGtagOptions = this._appendCustomMap({
+          // https://developers.google.com/analytics/devguides/collection/gtagjs/pages#disable_pageview_measurement
+          send_page_view: false, // default true, but React GA had false before.
+          ...this._toGtagOptions({ ...gaOptions, ...config.gaOptions }),
+          ...gtagOptions,
+          ...config.gaOptions,
+        });
+        this._gtag("config", config.trackingId, mergedGtagOptions);
+      });
     }
     this.isInitialized = true;
 
@@ -334,31 +350,26 @@ export class GA4 {
       this._gaCommand(...args);
     } else {
       const [readyCallback] = args;
-      this._gtag(
-        "get",
-        this._CURRENT_GA_MEASUREMENT_ID,
-        "client_id",
-        (clientId) => {
-          this._isQueuing = false;
-          const queues = this._queueGtag;
+      this._gtag("get", this._currentMeasurementId, "client_id", (clientId) => {
+        this._isQueuing = false;
+        const queues = this._queueGtag;
 
-          readyCallback({
-            get: (property) =>
-              property === "clientId"
-                ? clientId
-                : property === "trackingId"
-                ? this._CURRENT_GA_MEASUREMENT_ID
-                : property === "apiVersion"
-                ? "1"
-                : undefined,
-          });
+        readyCallback({
+          get: (property) =>
+            property === "clientId"
+              ? clientId
+              : property === "trackingId"
+              ? this._currentMeasurementId
+              : property === "apiVersion"
+              ? "1"
+              : undefined,
+        });
 
-          while (queues.length) {
-            const queue = queues.shift();
-            this._gtag(...queue);
-          }
+        while (queues.length) {
+          const queue = queues.shift();
+          this._gtag(...queue);
         }
-      );
+      });
 
       this._isQueuing = true;
     }

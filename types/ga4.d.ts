@@ -28,6 +28,13 @@
  * @property {boolean} [nonInteraction]
  * @property {('beacon'|'xhr'|'image')} [transport]
  */
+/**
+ * @typedef InitOptions
+ * @type {Object}
+ * @property {string} trackingId
+ * @property {GaOptions|any} [gaOptions]
+ * @property {Object} [gtagOptions] New parameter
+ */
 export class GA4 {
     reset: () => void;
     isInitialized: boolean;
@@ -40,18 +47,18 @@ export class GA4 {
     _toGtagOptions: (gaOptions: any) => {};
     /**
      *
-     * @param {string} GA_MEASUREMENT_ID
+     * @param {InitOptions|string} GA_MEASUREMENT_ID
      * @param {Object} [options]
      * @param {boolean} [options.testMode=false]
      * @param {GaOptions|any} [options.gaOptions]
      * @param {Object} [options.gtagOptions] New parameter
      */
-    initialize: (GA_MEASUREMENT_ID: string, options?: {
+    initialize: (GA_MEASUREMENT_ID: InitOptions | string, options?: {
         testMode?: boolean;
         gaOptions?: GaOptions | any;
         gtagOptions?: any;
     }) => void;
-    _CURRENT_GA_MEASUREMENT_ID: string;
+    _currentMeasurementId: any;
     set: (fieldsObject: any) => void;
     _gaCommandSendEvent: (eventCategory: any, eventAction: any, eventLabel: any, eventValue: any, fieldsObject: any) => void;
     _gaCommandSendEventParameters: (...args: any[]) => void;
@@ -118,4 +125,12 @@ export type UaEventOptions = {
     value?: number;
     nonInteraction?: boolean;
     transport?: ('beacon' | 'xhr' | 'image');
+};
+export type InitOptions = {
+    trackingId: string;
+    gaOptions?: GaOptions | any;
+    /**
+     * New parameter
+     */
+    gtagOptions?: any;
 };

@@ -28,6 +28,18 @@ ReactGA.send("pageview");
 More example can be found in [test suite](src/ga4.test.js)
 
 ```js
+// Multiple products (previously known as trackers)
+ReactGA.initialize([
+  {
+    trackingId: "your GA measurement id",
+    gaOptions: {...}, // optional
+    gtagOptions: {...}, // optional
+  },
+  {
+    trackingId: "your second GA measurement id",
+  },
+]);
+
 // Send pageview with a custom path
 ReactGA.send({ hitType: "pageview", page: "/my-path" });
 

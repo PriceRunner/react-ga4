@@ -26,6 +26,7 @@ describe("GA4", () => {
         custom_map: givenCustomMap,
         send_page_view: false,
       });
+      expect(gtag).toHaveBeenCalledTimes(2);
     });
 
     it("initialize() with options", () => {
@@ -46,6 +47,7 @@ describe("GA4", () => {
         send_page_view: false,
         cookie_update: false,
       });
+      expect(gtag).toHaveBeenCalledTimes(2);
     });
 
     it("initialize() in test mode", () => {
@@ -62,6 +64,30 @@ describe("GA4", () => {
 
       // Then
       expect(gtag).toHaveBeenCalledTimes(0);
+    });
+
+    it("initialize() multiple products", () => {
+      // Given
+      const GA_MEASUREMENT_ID2 = "GA_MEASUREMENT_ID2";
+      const config = [
+        { trackingId: GA_MEASUREMENT_ID },
+        { trackingId: GA_MEASUREMENT_ID2 },
+      ];
+
+      // When
+      GA4.initialize(config);
+
+      // Then
+      expect(gtag).toHaveBeenNthCalledWith(1, "js", newDate);
+      expect(gtag).toHaveBeenNthCalledWith(2, "config", GA_MEASUREMENT_ID, {
+        custom_map: givenCustomMap,
+        send_page_view: false,
+      });
+      expect(gtag).toHaveBeenNthCalledWith(3, "config", GA_MEASUREMENT_ID2, {
+        custom_map: givenCustomMap,
+        send_page_view: false,
+      });
+      expect(gtag).toHaveBeenCalledTimes(3);
     });
   });
 
