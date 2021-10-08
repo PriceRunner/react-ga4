@@ -89,7 +89,7 @@ export class GA4 {
      * @param {Object} options
      * @param {string} options.label
      * @param {function} hitCallback
-     * @deprecated
+     * @deprecated Use `enhanced measurement` feature in Google Analytics.
      */
     outboundLink({ label }: {
         label: string;

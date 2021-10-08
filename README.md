@@ -102,9 +102,13 @@ This method signature are NOT for `UA-XXX`
 
 #### ReactGA&#46;ga(...args)
 
-#### ~~ReactGA.pageview(path, \_, title)~~ Deprecated Use `.send("pageview")` instead
+#### ~~ReactGA.pageview(path, \_, title)~~
 
-#### ~~ReactGA.outboundLink({ label }, hitCallback)~~ Deprecated
+Deprecated Use `.send("pageview")` instead
+
+#### ~~ReactGA.outboundLink({ label }, hitCallback)~~
+
+Deprecated Use `enhanced measurement` feature in Google Analytics.
 
 ## Debugging
 
