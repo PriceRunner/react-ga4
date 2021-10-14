@@ -142,7 +142,7 @@ export class GA4 {
 
   /**
    *
-   * @param {InitOptions|string} GA_MEASUREMENT_ID
+   * @param {InitOptions[]|string} GA_MEASUREMENT_ID
    * @param {Object} [options]
    * @param {boolean} [options.testMode=false]
    * @param {GaOptions|any} [options.gaOptions]
