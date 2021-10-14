@@ -47,13 +47,13 @@ export class GA4 {
     _toGtagOptions: (gaOptions: any) => {};
     /**
      *
-     * @param {InitOptions|string} GA_MEASUREMENT_ID
+     * @param {InitOptions[]|string} GA_MEASUREMENT_ID
      * @param {Object} [options]
      * @param {boolean} [options.testMode=false]
      * @param {GaOptions|any} [options.gaOptions]
      * @param {Object} [options.gtagOptions] New parameter
      */
-    initialize: (GA_MEASUREMENT_ID: InitOptions | string, options?: {
+    initialize: (GA_MEASUREMENT_ID: InitOptions[] | string, options?: {
         testMode?: boolean;
         gaOptions?: GaOptions | any;
         gtagOptions?: any;
