@@ -74,6 +74,10 @@ export class GA4 {
     }
   };
 
+  gtag(...args) {
+    this._gtag(...args);
+  }
+
   _loadGA = (GA_MEASUREMENT_ID) => {
     if (typeof window === "undefined" || typeof document === "undefined") {
       return;
