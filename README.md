@@ -61,6 +61,7 @@ ReactGA.event({
 | Parameter           | Notes                                                                                                                   |
 | ------------------- | ----------------------------------------------------------------------------------------------------------------------- |
 | GA_MEASUREMENT_ID   | `string` Required                                                                                                       |
+| options.nonce       | `string` Optional Used for Content Security Policy (CSP) [more](https://developers.google.com/tag-manager/web/csp)      |
 | options.testMode    | `boolean` Default false                                                                                                 |
 | options.gaOptions   | `object` Optional [Reference](https://developers.google.com/analytics/devguides/collection/analyticsjs/field-reference) |
 | options.gtagOptions | `object` Optional                                                                                                       |
@@ -99,6 +100,8 @@ This method signature are NOT for `UA-XXX`
 | Parameter    | Notes             |
 | ------------ | ----------------- |
 | fieldsObject | `object` Required |
+
+#### ReactGA&#46;gtag(...args)
 
 #### ReactGA&#46;ga(...args)
 
