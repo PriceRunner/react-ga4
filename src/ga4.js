@@ -151,6 +151,7 @@ export class GA4 {
    *
    * @param {InitOptions[]|string} GA_MEASUREMENT_ID
    * @param {Object} [options]
+   * @param {boolean} [options.legacyDimensionMetric=true]
    * @param {string} [options.nonce]
    * @param {boolean} [options.testMode=false]
    * @param {GaOptions|any} [options.gaOptions]
@@ -167,7 +168,13 @@ export class GA4 {
         : GA_MEASUREMENT_ID;
 
     this._currentMeasurementId = initConfigs[0].trackingId;
-    const { nonce, testMode = false, gaOptions, gtagOptions } = options;
+    const {
+      gaOptions,
+      gtagOptions,
+      legacyDimensionMetric = true,
+      nonce,
+      testMode = false,
+    } = options;
     this._testMode = testMode;
 
     if (!testMode) {
@@ -177,13 +184,16 @@ export class GA4 {
       this._gtag("js", new Date());
 
       initConfigs.forEach((config) => {
-        const mergedGtagOptions = this._appendCustomMap({
-          // https://developers.google.com/analytics/devguides/collection/gtagjs/pages#disable_pageview_measurement
-          send_page_view: false, // default true, but React GA had false before.
-          ...this._toGtagOptions({ ...gaOptions, ...config.gaOptions }),
-          ...gtagOptions,
-          ...config.gaOptions,
-        });
+        const mergedGtagOptions = this._appendCustomMap(
+          {
+            // https://developers.google.com/analytics/devguides/collection/gtagjs/pages#disable_pageview_measurement
+            send_page_view: false, // default true, but React GA had false before.
+            ...this._toGtagOptions({ ...gaOptions, ...config.gaOptions }),
+            ...gtagOptions,
+            ...config.gaOptions,
+          },
+          legacyDimensionMetric
+        );
         this._gtag("config", config.trackingId, mergedGtagOptions);
       });
     }
@@ -470,7 +480,11 @@ export class GA4 {
     this._gaCommand("send", fieldObject);
   };
 
-  _appendCustomMap(options) {
+  _appendCustomMap(options, legacyDimensionMetric = true) {
+    if (!legacyDimensionMetric) {
+      return options;
+    }
+
     if (!options.custom_map) {
       options.custom_map = {};
     }

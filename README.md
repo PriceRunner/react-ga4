@@ -58,13 +58,14 @@ ReactGA.event({
 
 #### ReactGA.initialize(GA_MEASUREMENT_ID, options)
 
-| Parameter           | Notes                                                                                                                   |
-| ------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| GA_MEASUREMENT_ID   | `string` Required                                                                                                       |
-| options.nonce       | `string` Optional Used for Content Security Policy (CSP) [more](https://developers.google.com/tag-manager/web/csp)      |
-| options.testMode    | `boolean` Default false                                                                                                 |
-| options.gaOptions   | `object` Optional [Reference](https://developers.google.com/analytics/devguides/collection/analyticsjs/field-reference) |
-| options.gtagOptions | `object` Optional                                                                                                       |
+| Parameter                     | Notes                                                                                                                   |
+| ----------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| GA_MEASUREMENT_ID             | `string` Required                                                                                                       |
+| options.nonce                 | `string` Optional Used for Content Security Policy (CSP) [more](https://developers.google.com/tag-manager/web/csp)      |
+| options.testMode              | `boolean` Default false                                                                                                 |
+| options.gaOptions             | `object` Optional [Reference](https://developers.google.com/analytics/devguides/collection/analyticsjs/field-reference) |
+| options.gtagOptions           | `object` Optional                                                                                                       |
+| options.legacyDimensionMetric | `boolean` Default true                                                                                                  |
 
 #### ReactGA.set(fieldsObject)
 
@@ -112,6 +113,16 @@ Deprecated Use `.send("pageview")` instead
 #### ~~ReactGA.outboundLink({ label }, hitCallback)~~
 
 Deprecated Use `enhanced measurement` feature in Google Analytics.
+
+### Extending
+
+```js
+import { ReactGAImplementation } from "react-ga4";
+
+class MyCustomOverriddenClass extends ReactGAImplementation {}
+
+export default new MyCustomOverriddenClass();
+```
 
 ## Debugging
 
