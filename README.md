@@ -75,7 +75,15 @@ ReactGA.event({
 
 #### ReactGA.event(name, params)
 
-This method signature are NOT for `UA-XXX`
+This method signature are NOT for `UA-XXX`. Use this method signature if you don't want to send events with first letter in uppercase.
+
+```js
+// Custom event sample:
+ReactGA.event("event_name", {
+  event_category: "event_category",
+  event_label: "event_label",
+});
+```
 
 | Parameter | Notes                                                                                                                         |
 | --------- | ----------------------------------------------------------------------------------------------------------------------------- |
