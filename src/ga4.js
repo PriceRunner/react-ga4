@@ -190,7 +190,7 @@ export class GA4 {
             send_page_view: false, // default true, but React GA had false before.
             ...this._toGtagOptions({ ...gaOptions, ...config.gaOptions }),
             ...gtagOptions,
-            ...config.gaOptions,
+            ...config.gtagOptions,
           },
           legacyDimensionMetric
         );
