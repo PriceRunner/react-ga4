@@ -372,16 +372,18 @@ export class GA4 {
         this._isQueuing = false;
         const queues = this._queueGtag;
 
-        readyCallback({
-          get: (property) =>
-            property === "clientId"
-              ? clientId
-              : property === "trackingId"
-              ? this._currentMeasurementId
-              : property === "apiVersion"
-              ? "1"
-              : undefined,
-        });
+        if(readyCallback) {
+          readyCallback({
+            get: (property) =>
+              property === "clientId"
+                ? clientId
+                : property === "trackingId"
+                ? this._currentMeasurementId
+                : property === "apiVersion"
+                ? "1"
+                : undefined,
+          });
+        }
 
         while (queues.length) {
           const queue = queues.shift();
