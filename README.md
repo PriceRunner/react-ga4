@@ -20,7 +20,10 @@ npm i react-ga4
 import ReactGA from "react-ga4";
 
 ReactGA.initialize("your GA measurement id");
-ReactGA.send("pageview");
+
+const page = window.location.pathname + window.location.search;
+ReactGA.send({ hitType: "pageview", page, title: page });
+
 ```
 
 ## Example
