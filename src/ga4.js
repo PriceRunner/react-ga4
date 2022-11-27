@@ -87,7 +87,7 @@ export class GA4 {
       // Global Site Tag (gtag.js) - Google Analytics
       const script = document.createElement("script");
       script.async = true;
-      script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
+      script.src = `./ga_source.js`;
       if (nonce) {
         script.setAttribute("nonce", nonce);
       }
