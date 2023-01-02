@@ -44,13 +44,14 @@ export class GA4 {
     _queueGtag: any[];
     _gtag: (...args: any[]) => void;
     gtag(...args: any[]): void;
-    _loadGA: (GA_MEASUREMENT_ID: any, nonce: any, scriptSrc: any) => void;
+    _loadGA: (GA_MEASUREMENT_ID: any, nonce: any, scriptSrc: any, scriptLoadingMode: any) => void;
     _toGtagOptions: (gaOptions: any) => {};
     /**
      *
      * @param {InitOptions[]|string} GA_MEASUREMENT_ID
      * @param {Object} [options]
      * @param {boolean} [options.scriptSrc="https://www.googletagmanager.com/gtag/js"]
+     * @param {'async'|'defer'} [options.scriptLoadingMode='async']
      * @param {boolean} [options.legacyDimensionMetric=true]
      * @param {string} [options.nonce]
      * @param {boolean} [options.testMode=false]
@@ -59,6 +60,7 @@ export class GA4 {
      */
     initialize: (GA_MEASUREMENT_ID: InitOptions[] | string, options?: {
         scriptSrc?: boolean;
+        scriptLoadingMode?: 'async' | 'defer';
         legacyDimensionMetric?: boolean;
         nonce?: string;
         testMode?: boolean;
