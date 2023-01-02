@@ -44,7 +44,7 @@ export class GA4 {
     _queueGtag: any[];
     _gtag: (...args: any[]) => void;
     gtag(...args: any[]): void;
-    _loadGA: (GA_MEASUREMENT_ID: any, nonce: any) => void;
+    _loadGA: (GA_MEASUREMENT_ID: any, nonce: any, scriptSrc: any) => void;
     _toGtagOptions: (gaOptions: any) => {};
     /**
      *
