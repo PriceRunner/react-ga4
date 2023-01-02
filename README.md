@@ -3,15 +3,15 @@
 ## Migrate from old react-ga
 
 ```js
-// Simply replace `react-ga` with `react-ga4`
-// import ReactGA from "react-ga-forked";
+// Simply replace `react-ga` with `react-ga4-forked`
+// import ReactGA from "react-ga";
 import ReactGA from "react-ga4-forked";
 ```
 
 ## Install
 
 ```bash
-npm i react-ga4
+npm i react-ga4-forked
 ```
 
 ## Usage
@@ -118,7 +118,7 @@ Deprecated Use `enhanced measurement` feature in Google Analytics.
 ### Extending
 
 ```js
-import { ReactGAImplementation } from "react-ga4";
+import { ReactGAImplementation } from "react-ga4-forked";
 
 class MyCustomOverriddenClass extends ReactGAImplementation {}
 
