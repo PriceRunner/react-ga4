@@ -78,7 +78,7 @@ export class GA4 {
     this._gtag(...args);
   }
 
-  _loadGA = (GA_MEASUREMENT_ID, nonce) => {
+  _loadGA = (GA_MEASUREMENT_ID, nonce, scriptSrc) => {
     if (typeof window === 'undefined' || typeof document === 'undefined') {
       return;
     }
