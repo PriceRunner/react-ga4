@@ -50,6 +50,7 @@ export class GA4 {
      *
      * @param {InitOptions[]|string} GA_MEASUREMENT_ID
      * @param {Object} [options]
+     * @param {boolean} [options.scriptSrc="https://www.googletagmanager.com/gtag/js"]
      * @param {boolean} [options.legacyDimensionMetric=true]
      * @param {string} [options.nonce]
      * @param {boolean} [options.testMode=false]
@@ -57,6 +58,7 @@ export class GA4 {
      * @param {Object} [options.gtagOptions] New parameter
      */
     initialize: (GA_MEASUREMENT_ID: InitOptions[] | string, options?: {
+        scriptSrc?: boolean;
         legacyDimensionMetric?: boolean;
         nonce?: string;
         testMode?: boolean;
@@ -100,7 +102,7 @@ export class GA4 {
         label: string;
     }, hitCallback: Function): void;
 }
-declare var _default: GA4;
+declare const _default: GA4;
 export default _default;
 export type GaOptions = {
     cookieUpdate?: boolean;

@@ -9,9 +9,9 @@ function toTitleCase(string) {
         index > 0 &&
         index + match.length !== title.length &&
         match.search(smallWords) > -1 &&
-        title.charAt(index - 2) !== ":" &&
-        (title.charAt(index + match.length) !== "-" ||
-          title.charAt(index - 1) === "-") &&
+        title.charAt(index - 2) !== ':' &&
+        (title.charAt(index + match.length) !== '-' ||
+          title.charAt(index - 1) === '-') &&
         title.charAt(index - 1).search(/[^\s-]/) < 0
       ) {
         return match.toLowerCase();
@@ -29,13 +29,13 @@ function toTitleCase(string) {
 // https://support.google.com/analytics/answer/2795983?hl=en
 function mightBeEmail(s) {
   // There's no point trying to validate rfc822 fully, just look for ...@...
-  return typeof s === "string" && s.indexOf("@") !== -1;
+  return typeof s === 'string' && s.indexOf('@') !== -1;
 }
 
-const redacted = "REDACTED (Potential Email Address)";
+const redacted = 'REDACTED (Potential Email Address)';
 function redactEmail(string) {
   if (mightBeEmail(string)) {
-    console.warn("This arg looks like an email address, redacting.");
+    console.warn('This arg looks like an email address, redacting.');
 
     return redacted;
   }
@@ -44,11 +44,11 @@ function redactEmail(string) {
 }
 
 export default function format(
-  s = "",
+  s = '',
   titleCase = true,
-  redactingEmail = true
+  redactingEmail = true,
 ) {
-  let _str = s || "";
+  let _str = s || '';
 
   if (titleCase) {
     _str = toTitleCase(s);

@@ -4,8 +4,8 @@
 
 ```js
 // Simply replace `react-ga` with `react-ga4`
-// import ReactGA from "react-ga";
-import ReactGA from "react-ga4";
+// import ReactGA from "react-ga-forked";
+import ReactGA from "react-ga4-forked";
 ```
 
 ## Install
@@ -17,7 +17,7 @@ npm i react-ga4
 ## Usage
 
 ```js
-import ReactGA from "react-ga4";
+import ReactGA from "react-ga4-forked";
 
 ReactGA.initialize("your GA measurement id");
 ReactGA.send("pageview");
