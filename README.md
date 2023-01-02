@@ -66,6 +66,7 @@ ReactGA.event({
 | options.gaOptions             | `object` Optional [Reference](https://developers.google.com/analytics/devguides/collection/analyticsjs/field-reference) |
 | options.gtagOptions           | `object` Optional                                                                                                       |
 | options.legacyDimensionMetric | `boolean` Default true                                                                                                  |
+| options.scriptSrc             | `string` Default `https://www.googletagmanager.com/gtag/js`                                                             |
 
 #### ReactGA.set(fieldsObject)
 
