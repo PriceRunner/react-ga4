@@ -1,4 +1,4 @@
-# React Google Analytics 4
+# React Google Analytics 4 - forked
 
 ## Migrate from old react-ga
 
