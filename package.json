@@ -1,6 +1,6 @@
 {
   "name": "react-ga4-forked",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "description": "React Google Analytics 4 - forked",
   "main": "dist/index.js",
   "types": "types/index.d.ts",
