@@ -67,6 +67,7 @@ ReactGA.event({
 | options.gtagOptions           | `object` Optional                                                                                                       |
 | options.legacyDimensionMetric | `boolean` Default true                                                                                                  |
 | options.scriptSrc             | `string` Default `https://www.googletagmanager.com/gtag/js`                                                             |
+| options.scriptLoadingMode     | `'async'\|'defer'\` Default `async`                                                                                     |
 
 #### ReactGA.set(fieldsObject)
 
